@@ -76,20 +76,23 @@ int handle_reply(unsigned char* packet, int length, struct in6_addr src) {
 				fprintf(stderr, "reject false dst\n");
 				return 2;
 			}
-           fprintf(stderr, "enterthe next\n");
+           
 		}
 		if (hdr->version != 6) {fprintf(stderr, "reject iptype\n");return 2;}
 		else {
 			int next = 40;
 			int nexthdr = hdr->nxt;
+			fprintf(stderr, "enter the next1\n");
 			while (nexthdr != 58) {
 				if (nexthdr != 0x00 && nexthdr != 0x2b && nexthdr != 0x3c) return 2;
 				nexthdr = *(packet + next);
 				next += 8 + 8 * *(packet + next + 1);
 			}
+			fprintf(stderr, "enter the next2\n");
 
 			ICMPV6H* icmphdr = (ICMPV6H*) (packet + next);;
 			char* cksm = icmp6_checksum(hdr, hdr + next, 8);
+			fprintf(stderr, "enter the next3\n");
 			if (*(uint16_t*) cksm != 0) {
 				fprintf(stderr, "reject cksum\n");
 				return 2;
