@@ -97,7 +97,7 @@ int handle_reply(unsigned char* packet, int length, struct in6_addr src) {
 				fprintf(stderr, "reject cksum\n");
 				return 2;
 				}
-
+				fprintf(stderr, "enter the next4\n");
 			//fprintf(stderr, "the dst address of the sending is %s", inet_ntop(AF_INET6, &hdr->dst, ipstring, sizeof(ipstring)));
 			switch (icmphdr->icmp6_type)
 			{
@@ -119,6 +119,7 @@ int handle_reply(unsigned char* packet, int length, struct in6_addr src) {
 			   fprintf(stderr, "type does not match, type is %d", icmphdr->icmp6_type);
 				printf("  *");
 			}
+			fprintf(stderr, "enter the next5\n");
 		}
 	}
 	return 0;
