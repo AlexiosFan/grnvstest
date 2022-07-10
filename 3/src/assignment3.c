@@ -73,7 +73,6 @@ int handle_reply(unsigned char* packet, int length, struct in6_addr src) {
 		char ipstring[INET6_ADDRSTRLEN];
 		{
 			if (memcmp(&src, &(hdr->dst), 16) != 0) {
-				fprintf(stderr, "reject false dst\n");
 				return 2;
 			}
            
@@ -82,17 +81,14 @@ int handle_reply(unsigned char* packet, int length, struct in6_addr src) {
 		else {
 			int next = 40;
 			int nexthdr = hdr->nxt;
-			fprintf(stderr, "enter the next1\n");
 			while (nexthdr != 58) {
 				if (nexthdr != 0x00 && nexthdr != 0x2b && nexthdr != 0x3c) return 2;
 				nexthdr = *(packet + next);
 				next += 8 + 8 * *(packet + next + 1);
 			}
-			fprintf(stderr, "enter the next2\n");
 
 			ICMPV6H* icmphdr = (ICMPV6H*) (packet + next);;
 			uint16_t cksm = icmp6_checksum(hdr, hdr + next, 8);
-			fprintf(stderr, "enter the next3\n");
 			if (cksm != 0) {
 				fprintf(stderr, "reject cksum\n");
 				return 2;
@@ -103,16 +99,16 @@ int handle_reply(unsigned char* packet, int length, struct in6_addr src) {
 			{
 			case 129:
 			if ((*((char* )hdr + next + 1)) != 0) {fprintf(stderr, "reject code\n");return 2;}
-			if (inet_ntop(AF_INET6, &hdr->src, ipstring, sizeof(ipstring)) == NULL) printf("  *");
+			if (inet_ntop(AF_INET6, &hdr->src, ipstring, sizeof(ipstring)) == NULL) {fprintf(stderr, "invalid address\n"); printf("  *");}
 			else fprintf(stdout, "  %s", ipstring);
 				break;
 			case 3:// time exceeded
 			if (*((char* )hdr + next + 1) != 0) {fprintf(stderr, "reject code\n");return 2;}
-			if (inet_ntop(AF_INET6, &hdr->src, ipstring, sizeof(ipstring)) == NULL) printf("  *");
+			if (inet_ntop(AF_INET6, &hdr->src, ipstring, sizeof(ipstring)) == NULL)  {fprintf(stderr, "invalid address\n"); printf("  *");}
 			else fprintf(stdout, "  %s", ipstring);
 			    return 1;
 			case 1:// destination unreachable
-			if (inet_ntop(AF_INET6, &hdr->src, ipstring, sizeof(ipstring)) == NULL) printf("  *");
+			if (inet_ntop(AF_INET6, &hdr->src, ipstring, sizeof(ipstring)) == NULL)  {fprintf(stderr, "invalid address\n"); printf("  *");}
 			else fprintf(stdout, "  %s!X", ipstring);
 			    break;
 			default:
