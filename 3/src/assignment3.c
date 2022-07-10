@@ -73,12 +73,12 @@ int handle_reply(unsigned char* packet, int length, struct in6_addr src) {
 		char ipstring[INET6_ADDRSTRLEN];
 		{
 			if (memcmp(&src, &(hdr->dst), 16) != 0) {
-				fprintf(stderr, "reject false dst");
+				fprintf(stderr, "reject false dst\n");
 				return 2;
 			}
 
 		}
-		if (hdr->version != 6) {fprintf(stderr, "reject iptype");return 2;}
+		if (hdr->version != 6) {fprintf(stderr, "reject iptype\n");return 2;}
 		else {
 			int next = 40;
 			int nexthdr = hdr->nxt;
@@ -91,7 +91,7 @@ int handle_reply(unsigned char* packet, int length, struct in6_addr src) {
 			ICMPV6H* icmphdr = (ICMPV6H*) (packet + next);;
 			char* cksm = icmp6_checksum(hdr, hdr + next, 8);
 			if (*(uint16_t*) cksm != 0) {
-				fprintf(stderr, "reject cksum");
+				fprintf(stderr, "reject cksum\n");
 				return 2;
 				}
 
@@ -99,12 +99,12 @@ int handle_reply(unsigned char* packet, int length, struct in6_addr src) {
 			switch (icmphdr->icmp6_type)
 			{
 			case 129:
-			if ((*((char* )hdr + next + 1)) != 0) {fprintf(stderr, "reject code");return 2;}
+			if ((*((char* )hdr + next + 1)) != 0) {fprintf(stderr, "reject code\n");return 2;}
 			if (inet_ntop(AF_INET6, &hdr->src, ipstring, sizeof(ipstring)) == NULL) printf("  *");
 			else fprintf(stdout, "  %s", ipstring);
 				break;
 			case 3:// time exceeded
-			if (*((char* )hdr + next + 1) != 0) {fprintf(stderr, "reject code");return 2;}
+			if (*((char* )hdr + next + 1) != 0) {fprintf(stderr, "reject code\n");return 2;}
 			if (inet_ntop(AF_INET6, &hdr->src, ipstring, sizeof(ipstring)) == NULL) printf("  *");
 			else fprintf(stdout, "  %s", ipstring);
 			    return 1;
