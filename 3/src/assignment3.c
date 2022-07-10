@@ -76,7 +76,7 @@ int handle_reply(unsigned char* packet, int length, struct in6_addr src) {
 				fprintf(stderr, "reject false dst\n");
 				return 2;
 			}
-
+           fprintf(stderr, "enterthe next\n");
 		}
 		if (hdr->version != 6) {fprintf(stderr, "reject iptype\n");return 2;}
 		else {
