@@ -88,9 +88,8 @@ int handle_reply(unsigned char* packet, int length, struct in6_addr src) {
 			}
 
 			ICMPV6H* icmphdr = (ICMPV6H*) (packet + next);
-			uint16_t tmp = icmphdr->icmp6_cksum;
 			uint16_t cksm = icmp6_checksum((struct ip6_hdr *) packet,packet + next, 8);
-			if (cksm != tmp) {
+			if (cksm != 0) {
 				fprintf(stderr, "reject cksum %d\n", cksm);
 				return 2;
 				}
