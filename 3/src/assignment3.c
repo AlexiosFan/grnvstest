@@ -199,7 +199,7 @@ void run(int fd, const char *ipaddr, int timeoutval, int attempts,
 		  }
 		}
 		printf("\n"); //ending of the current hop
-		if (out){fprint(stderr, "out\n");break;}
+		if (out){fprintf(stderr, "out\n");break;}
 	}
 
 /*===========================================================================*/
