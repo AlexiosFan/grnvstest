@@ -91,9 +91,9 @@ int handle_reply(unsigned char* packet, int length, struct in6_addr src) {
 			fprintf(stderr, "enter the next2\n");
 
 			ICMPV6H* icmphdr = (ICMPV6H*) (packet + next);;
-			char* cksm = icmp6_checksum(hdr, hdr + next, 8);
+			uint16_t cksm = icmp6_checksum(hdr, hdr + next, 8);
 			fprintf(stderr, "enter the next3\n");
-			if (*(uint16_t*) cksm != 0) {
+			if (cksm != 0) {
 				fprintf(stderr, "reject cksum\n");
 				return 2;
 				}
