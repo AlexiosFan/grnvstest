@@ -166,7 +166,7 @@ void run(int fd, const char *ipaddr, int timeoutval, int attempts,
 	 * 2) Loop over hoplimit and attempts
 	 * 3) Build and send a packet for each iteration
 	 * 4) Print the hops found in the specified format
-	 */
+	   fdf*/
 
 	for (int i = 1; i <= hoplimit; i++) {
 		int out = 0;
